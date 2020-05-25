@@ -30,12 +30,9 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         
         // set up activity view controller
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        
         // present the view controller
-        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
+        presetController(activityViewController: activityViewController)
         
-        controller.show(activityViewController, sender: self)
     }
     
     func file(arguments:Any?) -> Void {
@@ -60,11 +57,9 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         // set up activity view controller
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         
-        // present the view controller
-        let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
-        
-        controller.show(activityViewController, sender: self)
+
+       // present the view controller
+              presetController(activityViewController: activityViewController)
     }
     
     func files(arguments:Any?) -> Void {
@@ -93,8 +88,21 @@ public class SwiftEsysFlutterSharePlugin: NSObject, FlutterPlugin {
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
         
         // present the view controller
+        presetController(activityViewController: activityViewController)
+    }
+    
+    func presetController(activityViewController:UIActivityViewController){
+        
         let controller = UIApplication.shared.keyWindow!.rootViewController as! FlutterViewController
-        activityViewController.popoverPresentationController?.sourceView = controller.view
+        
+        
+        //avoiding to crash on iPad
+        if let popoverController = activityViewController.popoverPresentationController {
+            popoverController.sourceRect = CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 0, height: 0)
+            popoverController.sourceView = controller.view
+            popoverController.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
+        }
+        
         
         controller.show(activityViewController, sender: self)
     }
